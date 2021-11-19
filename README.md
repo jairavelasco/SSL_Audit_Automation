@@ -25,3 +25,15 @@
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
+
+## References
+* https://www.saltycrane.com/blog/2011/11/how-get-username-home-directory-and-hostname-python/
+* https://docs.python.org/3/library/urllib.parse.html
+* https://stackoverflow.com/questions/9530950/parsing-hostname-and-port-from-string-or-url
+* https://github.com/nabla-c0d3/sslyze
+* https://nabla-c0d3.github.io/sslyze/documentation/#installation
+* https://pypi.org/project/sslyze/
+* https://stackoverflow.com/questions/8370361/get-ip-address-of-url-in-python
+* https://docs.python.org/3/library/urllib.parse.html
+* https://intellipaat.com/community/19861/parsing-hostname-and-port-from-string-or-url
+* https://pythonguides.com/python-get-an-ip-address/

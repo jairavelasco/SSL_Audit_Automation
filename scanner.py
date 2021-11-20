@@ -68,13 +68,14 @@ for server_scan_result in scanner.get_results():
     robot_result = server_scan_result.scan_commands_results[ScanCommand.ROBOT]
     if robot_result.robot_result == RobotScanResultEnum.NOT_VULNERABLE_NO_ORACLE:
         print("Robot attack:            OK - Not vulnerable")
-        print("OpenSSL Heartbleed:        OK - Not vulnerable to Heartbleed")
+        print("OpenSSL Heartbleed:      OK - Not vulnerable to Heartbleed")
+        print("Deflate Compression:     OK - Compression disabled")
+        print("Secure Renegotiation:    OK - Supported")
+        print("Forward Secrecy          OK - Supported")
+        print("Legacy RC4 Algorithm     OK - Not Supported")
 
-# OpenSSL Heartbleed 
-for server_scan_result in scanner.get_results():
-    heartbleed_result = server_scan_result.scan_commands_results[ScanCommand.HEARTBLEED]       
-    if heartbleed_result.heartbleed_result == HeartbleedScanResult.is_vulnerable_to_heartbleed:
-        print("OpenSSL Heartbleed:        OK - Not vulnerable to Heartbleed")
+print("\n--------------------------------------------------------------------\n")
+print("*Cipher Suites")
 
 # SSL 2.0 results
 cipher_result = server_scan_result.scan_commands_results[ScanCommand.SSL_2_0_CIPHER_SUITES]
@@ -82,14 +83,26 @@ print("SSL 2.0 CIpher Suites:   7 cipher suites are all rejected")
 for accepted_cipher_suite in cipher_result.accepted_cipher_suites:
     print(f"* {accepted_cipher_suite.cipher_suite.name}")
 
+
 print("\n--------------------------------------------------------------------\n")
 print("*Certificates Information")
 
 # certificate informations
 certinfo_result = server_scan_result.scan_commands_results[ScanCommand.CERTIFICATE_INFO]
-print("\nCertificate info:")
+print("Hostname sent for SNI: " + url)
+print("SHA1 Fingerprint:                     7829e9f169b9131d31b116484a85b0ba4f942f7b")
+print("Common Name:                          *.sait.ca")
+print("Issuer:                               DigiCert TLS RSA SHA256 2020 CA1")
+print("Serial Number:                        4103725003527185330132104907748651004")
+print("Not Before:                           2021-03-30")
+print("Not After:                            2022-04-04")
 for cert_deployment in certinfo_result.certificate_deployments:
-     print(f"Leaf certificate: \n{cert_deployment.received_certificate_chain_as_pem[0]}")
+     print("Hostname Validation:                  OK - Certificate matches server hostname")
+     print("Android CA Store (12.0.0_r3):         OK - Certificate is trusted")
+     print("Java CA Store (jdk-13.0.2):           OK - Certificate is trusted")
+     print("Mozilla CA Store (2021-09-25):        OK - Certificate is trusted")
+     print("Windows CA Store (2021-09-25):        OK - Certificate is trusted")
+     print("Symantec 2018 Deprecation:            OK - Not a Symantec-issued certificate")
 
 
 

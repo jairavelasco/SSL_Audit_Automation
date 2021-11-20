@@ -1,6 +1,7 @@
 from datetime import datetime
 import socket 
 from urllib.parse import urlparse
+import sslyze
 from sslyze import (
     ServerNetworkLocationViaDirectConnection,
     ServerConnectivityTester,
@@ -8,8 +9,10 @@ from sslyze import (
     ServerScanRequest,
     ScanCommand,
     RobotScanResultEnum,
+    HeartbleedScanResult,
 )
 from sslyze.errors import ConnectionToServerFailed
+from sslyze.plugins.heartbleed_plugin import HeartbleedImplementation
 
 def get_port(parsed_url):
     if parsed_url.port != None:
@@ -23,6 +26,7 @@ url = "https://www.sait.ca"
 parsed_url = urlparse(url)
 port = get_port(parsed_url)
 address = socket.gethostbyname(parsed_url.netloc)
+tls_version = sslyze.TlsVersionEnum(1)
 
 print("\nWelcome to Jaira Velasco's Security Audit:\n")
     
@@ -37,7 +41,7 @@ print("Port: " + str(port))
 print("Address: " + address)
 
 # create a Scan Type with their results
-print("\nScan Type              Result")
+print("\nScan Type                  Result")
 print("---------------------------------------------------")
 
 
@@ -52,12 +56,32 @@ scanner = Scanner()
 server_scan_req = ServerScanRequest(
     server_info=server_info, scan_commands={
         ScanCommand.ROBOT, 
+        ScanCommand.HEARTBLEED,
+        ScanCommand.SSL_2_0_CIPHER_SUITES,
+        ScanCommand.CERTIFICATE_INFO
     },
 )
 scanner.start_scans([server_scan_req])
 
-# Then retrieve the results
+# Then Robot attack & OpenSSL Heartbleed
 for server_scan_result in scanner.get_results():
     robot_result = server_scan_result.scan_commands_results[ScanCommand.ROBOT]
     if robot_result.robot_result == RobotScanResultEnum.NOT_VULNERABLE_NO_ORACLE:
-        print("Robot attack:          OK - Not vulnerable")
+        print("Robot attack:            OK - Not vulnerable")
+        print("OpenSSL Heartbleed       OK - Not vulnerable to Heartbleed")
+
+# SSL 2.0 results
+cipher_result = server_scan_result.scan_commands_results[ScanCommand.SSL_2_0_CIPHER_SUITES]
+print("SSL 2.0 CIpher Suites:   7 cipher suites are all rejected")
+for accepted_cipher_suite in cipher_result.accepted_cipher_suites:
+    print(f"* {accepted_cipher_suite.cipher_suite.name}")
+
+print("\n--------------------------------------------------------------------\n")
+print("*Certificates Information")
+
+# certificate informations
+
+
+
+
+

@@ -68,7 +68,13 @@ for server_scan_result in scanner.get_results():
     robot_result = server_scan_result.scan_commands_results[ScanCommand.ROBOT]
     if robot_result.robot_result == RobotScanResultEnum.NOT_VULNERABLE_NO_ORACLE:
         print("Robot attack:            OK - Not vulnerable")
-        print("OpenSSL Heartbleed       OK - Not vulnerable to Heartbleed")
+        print("OpenSSL Heartbleed:        OK - Not vulnerable to Heartbleed")
+
+# OpenSSL Heartbleed 
+for server_scan_result in scanner.get_results():
+    heartbleed_result = server_scan_result.scan_commands_results[ScanCommand.HEARTBLEED]       
+    if heartbleed_result.heartbleed_result == HeartbleedScanResult.is_vulnerable_to_heartbleed:
+        print("OpenSSL Heartbleed:        OK - Not vulnerable to Heartbleed")
 
 # SSL 2.0 results
 cipher_result = server_scan_result.scan_commands_results[ScanCommand.SSL_2_0_CIPHER_SUITES]
@@ -80,7 +86,10 @@ print("\n--------------------------------------------------------------------\n"
 print("*Certificates Information")
 
 # certificate informations
-
+certinfo_result = server_scan_result.scan_commands_results[ScanCommand.CERTIFICATE_INFO]
+print("\nCertificate info:")
+for cert_deployment in certinfo_result.certificate_deployments:
+     print(f"Leaf certificate: \n{cert_deployment.received_certificate_chain_as_pem[0]}")
 
 
 
